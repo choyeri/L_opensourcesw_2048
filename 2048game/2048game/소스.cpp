@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include <time.h>
 #include <windows.h>
-#include <stdlib.h>	//exit함수 사용
-#include <conio.h>
+#include <stdlib.h>		//exit 함수 사용
+#include <conio.h>		//_kbhit, _getch 함수 사용
 
 //방향키 설정
 #define LEFT 75
@@ -72,7 +72,8 @@ void check_Gameover()	//게임오버 체크하는 함수
 	exit(0);
 }
 
-void check_Inputkey() {
+void check_Inputkey()		//방향키 입력받는 함수
+{		
 	char c;
 
 	if (_kbhit()) {
@@ -85,78 +86,80 @@ void check_Inputkey() {
 	}
 }
 
-void slide_Board(char inputkey)
+void slide_Board(char inputkey)		//방향키에 따라 움직이는 함수
 {
 	int i, j;
+	
+	for (int k = 0; k < 3; k++) {
+		switch (inputkey) {
+		case LEFT:
+			for (i = 0; i < 4; i++) {
+				for (j = 3; j >= 1; j--) {
+					if (board[i][j - 1] != 0) {
+						if (board[i][j] == board[i][j - 1]) {
+							board[i][j - 1] *= 2;
+							board[i][j] = 0;
+						}
+					}
+					else {
+						board[i][j - 1] = board[i][j];
+						board[i][j] = 0;
+					}
+				}
+			}
 
-	switch (inputkey) {
-	case LEFT:
-		for (i = 0; i < 4; i++) {
-			for (j = 3; j >= 1; j--) {
-				if (board[i][j - 1] != 0) {
-					if (board[i][j] == board[i][j - 1]) {
-						board[i][j - 1] *= 2;
+			break;
+		case RIGHT:
+			for (i = 0; i < 4; i++) {
+				for (j = 0; j < 3; j++) {
+					if (board[i][j + 1] != 0) {
+						if (board[i][j] == board[i][j + 1]) {
+							board[i][j + 1] *= 2;
+							board[i][j] = 0;
+						}
+					}
+					else {
+						board[i][j + 1] = board[i][j];
 						board[i][j] = 0;
 					}
 				}
-				else {
-					board[i][j - 1] = board[i][j];
-					board[i][j] = 0;
-				}
 			}
-		}
-		break;
-	case RIGHT:
-		for (i = 0; i < 4; i++) {
-			for (j = 0; j < 3; j++) {
-				if (board[i][j + 1] != 0) {
-					if (board[i][j] == board[i][j + 1]) {
-						board[i][j + 1] *= 2;
+			break;
+		case UP:
+			for (j = 0; j < 4; j++) {
+				for (i = 3; i >= 1; i--) {
+					if (board[i - 1][j] != 0) {
+						if (board[i][j] == board[i - 1][j]) {
+							board[i - 1][j] *= 2;
+							board[i][j] = 0;
+						}
+					}
+					else {
+						board[i - 1][j] = board[i][j];
 						board[i][j] = 0;
 					}
 				}
-				else {
-					board[i][j + 1] = board[i][j];
-					board[i][j] = 0;
-				}
 			}
-		}
-		break;
-	case UP:
-		for (j = 0; j < 4; j++) {
-			for (i = 3; i >= 1; i--) {
-				if (board[i-1][j] != 0) {
-					if (board[i][j] == board[i-1][j]) {
-						board[i-1][j] *= 2;
+			break;
+		case DOWN:
+			for (j = 0; j < 4; j++) {
+				for (i = 0; i < 3; i++) {
+					if (board[i + 1][j] != 0) {
+						if (board[i][j] == board[i + 1][j]) {
+							board[i + 1][j] *= 2;
+							board[i][j] = 0;
+						}
+					}
+					else {
+						board[i + 1][j] = board[i][j];
 						board[i][j] = 0;
 					}
 				}
-				else {
-					board[i-1][j] = board[i][j];
-					board[i][j] = 0;
-				}
 			}
+			break;
 		}
-		break;
-	case DOWN:
-		for (j = 0; j < 4; j++) {
-			for (i = 0; i < 3; i++) {
-				if (board[i+1][j] != 0) {
-					if (board[i][j] == board[i+1][j]) {
-						board[i+1][j] *= 2;
-						board[i][j] = 0;
-					}
-				}
-				else {
-					board[i+1][j] = board[i][j];
-					board[i][j] = 0;
-				}
-			}
-		}
-		break;
 	}
 }
-
 
 int main()
 {
