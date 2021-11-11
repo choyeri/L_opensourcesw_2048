@@ -18,7 +18,6 @@ void get_num();
 void check_Gameover();
 void slide_Board(char inputkey);
 void check_Inputkey();
-
 void gotoxy();
 
 void gotoxy(int x, int y)
@@ -26,8 +25,6 @@ void gotoxy(int x, int y)
 	COORD pos = { x,y };
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
 }
-
-
 
 void print_board()			// 보드를 만드는 함수
 {
@@ -65,23 +62,41 @@ void get_num()				// 보드에 랜덤으로 2 또는 4를 나타나게 하는 함수
 				cnt++;
 			}
 	}
-	*p0[rand() % (cnt)] = ((rand() % 100) < 80) ? 2 : 4;			// 2 또는 4를 만듦
+	if (cnt != 0) {
+		*p0[rand() % (cnt)] = ((rand() % 100) < 80) ? 2 : 4;			// 2 또는 4를 만듦
+	}
 }
 
 void check_Gameover()	//게임오버 체크하는 함수
 {
-	for (int i = 0; i < 4; i++) 
+	int dir[4][2] = {
+		0,-1,
+		0,1,
+		1,0,
+		-1,0 };
+
+
+	for (int i = 0; i < 4; i++)
 	{
-		for (int j = 0; j < 4; j++) 
+		for (int j = 0; j < 4; j++)
 		{
-			if (board[i][j] == 0)
-				return;
+			for (int k = 0; k < 4; k++) {
+				int dy = i + dir[k][0];
+				int dx = j + dir[k][1];
+
+				if (dy < 0 || dy > 3 || dx < 0 || dx > 3)
+					continue;
+
+				if (board[dy][dx] == 0 || board[dy][dx] == board[i][j])
+					return;
+			}
 		}
 	}
 
-	system("cls");
 	printf("Game Over");
+	
 	exit(0);
+
 }
 
 void check_Inputkey()		//방향키 입력받는 함수
@@ -110,6 +125,7 @@ void slide_Board(char inputkey)		//방향키에 따라 움직이는 함수
 					if (board[i][j - 1] != 0) {
 						if (board[i][j] == board[i][j - 1]) {
 							board[i][j - 1] *= 2;
+							score += 2 * board[i][j];
 							board[i][j] = 0;
 						}
 					}
@@ -127,6 +143,7 @@ void slide_Board(char inputkey)		//방향키에 따라 움직이는 함수
 					if (board[i][j + 1] != 0) {
 						if (board[i][j] == board[i][j + 1]) {
 							board[i][j + 1] *= 2;
+							score += 2 * board[i][j];
 							board[i][j] = 0;
 						}
 					}
@@ -143,6 +160,7 @@ void slide_Board(char inputkey)		//방향키에 따라 움직이는 함수
 					if (board[i - 1][j] != 0) {
 						if (board[i][j] == board[i - 1][j]) {
 							board[i - 1][j] *= 2;
+							score += 2 * board[i][j];
 							board[i][j] = 0;
 						}
 					}
@@ -159,6 +177,7 @@ void slide_Board(char inputkey)		//방향키에 따라 움직이는 함수
 					if (board[i + 1][j] != 0) {
 						if (board[i][j] == board[i + 1][j]) {
 							board[i + 1][j] *= 2;
+							score += 2 * board[i][j];
 							board[i][j] = 0;
 						}
 					}
