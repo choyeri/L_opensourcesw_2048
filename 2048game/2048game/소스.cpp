@@ -19,14 +19,26 @@ void check_Gameover();
 void slide_Board(char inputkey);
 void check_Inputkey();
 
+void gotoxy();
+
+void gotoxy(int x, int y)
+{
+	COORD pos = { x,y };
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
+}
+
+
+
 void print_board()			// 보드를 만드는 함수
 {
 	system("cls");
 
+	printf("play the 2048 game!\n\n");
 	for (int i = 0; i < 4; i++)
 	{
 		for (int j = 0; j < 4; j++)
 		{
+			gotoxy(j * 6, (i + 1) * 3);
 			if (board[i][j] == 0)
 				printf(" .");
 			else
@@ -34,7 +46,7 @@ void print_board()			// 보드를 만드는 함수
 		}
 		printf("\n");
 	}
-	printf("\n");
+	printf("\n\n");
 	printf("점수 : %d\n", score);
 }
 
