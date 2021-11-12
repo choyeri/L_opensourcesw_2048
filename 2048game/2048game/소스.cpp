@@ -12,6 +12,7 @@
 
 int score = 0;	// 점수
 int board[4][4] = { 0 };
+int buffer[4][4] = { 0 };		//board의 이전 상황 저장 변수
 
 void print_board();
 void get_num();
@@ -19,6 +20,7 @@ void check_Gameover();
 void slide_Board(char inputkey);
 void check_Inputkey();
 void gotoxy();
+void init_Board();
 
 void gotoxy(int x, int y)
 {
@@ -26,7 +28,7 @@ void gotoxy(int x, int y)
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), pos);
 }
 
-void print_board()			// 보드를 만드는 함수
+void init_Board()		//보드 생성
 {
 	system("cls");
 
@@ -45,6 +47,11 @@ void print_board()			// 보드를 만드는 함수
 	}
 	printf("\n\n");
 	printf("점수 : %d\n", score);
+}
+
+void print_board()			//깜빡임 방지를 위한 보드 출력 함수
+{
+	
 }
 
 void get_num()				// 보드에 랜덤으로 2 또는 4를 나타나게 하는 함수
@@ -117,7 +124,7 @@ void slide_Board(char inputkey)		//방향키에 따라 움직이는 함수
 {
 	int i, j;
 	
-	for (int k = 0; k < 3; k++) {
+	for (int k = 0; k < 3; k++) {		
 		switch (inputkey) {
 		case LEFT:
 			for (i = 0; i < 4; i++) {
@@ -197,8 +204,8 @@ int main()
 	get_num();
 	get_num();
 	while(1) {
-		print_board();
 		check_Inputkey();
+		print_board();
 		check_Gameover();
 	}
 }
