@@ -11,6 +11,7 @@
 #define DOWN 80
 
 int score = 0;	// 점수
+int buffer_Score = 0;
 int board[4][4] = { 0 };
 int buffer[4][4] = { 0 };		//board의 이전 상황 저장 변수
 
@@ -39,19 +40,42 @@ void init_Board()		//보드 생성
 		{
 			gotoxy(j * 6, (i + 1) * 3);
 			if (board[i][j] == 0)
-				printf(" .");
+				printf(" .   ");
 			else
-				printf(" %d", board[i][j]);
+				printf(" %d   ", board[i][j]);
 		}
 		printf("\n");
 	}
-	printf("\n\n");
+	gotoxy(0,15);
 	printf("점수 : %d\n", score);
 }
 
-void print_board()			//깜빡임 방지를 위한 보드 출력 함수
+void print_Board()			//깜빡임 방지를 위한 보드 출력 함수
 {
-	
+	for (int i = 0; i < 4; i++)
+	{
+		for (int j = 0; j < 4; j++)
+		{
+			if (board[i][j] == buffer[i][j])
+				continue;
+			
+			gotoxy(j * 6, (i + 1) * 3);
+
+			if (board[i][j] == 0)
+				printf(" .   ");
+			else
+				printf(" %d   ", board[i][j]);
+
+				buffer[i][j] = board[i][j];
+		}
+	}
+
+	if (buffer_Score == score)
+		return;
+
+	gotoxy(0, 15);
+	printf("점수 : %d\n", score);
+	buffer_Score = score;
 }
 
 void get_num()				// 보드에 랜덤으로 2 또는 4를 나타나게 하는 함수
@@ -203,9 +227,10 @@ int main()
 {
 	get_num();
 	get_num();
+	init_Board();
 	while(1) {
 		check_Inputkey();
-		print_board();
+		print_Board();
 		check_Gameover();
 	}
 }
